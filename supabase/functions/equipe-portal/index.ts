@@ -142,6 +142,13 @@ Deno.serve(async (req) => {
       }
       return json({ ok: true, added });
     }
+    if (action === "export") {
+      // Full copy for moving the portal to another project (admin only).
+      const people = await sql`select slug, name, role, email, lang, is_admin, token, created_at from equipe.people`;
+      const items = await sql`select * from equipe.items`;
+      const updates = await sql`select * from equipe.updates`;
+      return json({ people, items, updates });
+    }
     if (action === "link") {
       const [p] = await sql`select token from equipe.people where slug = ${String(body.slug ?? "")} and not is_admin`;
       if (!p) return json({ error: "not_found" }, 404);
