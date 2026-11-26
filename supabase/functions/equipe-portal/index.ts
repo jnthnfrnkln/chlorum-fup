@@ -31,11 +31,38 @@ async function itemsWithUpdates(where: any, admin: boolean) {
   });
 }
 
+// Claude's morning sync: a separate key, injected by the sync session's network
+// proxy as the x-sync-key header and stored here as the SYNC_KEY secret. It may
+// run SQL, but only as the limited role equipe_sync (equipe tables, no tokens).
+const SYNC_KEY = Deno.env.get("SYNC_KEY") ?? "";
+function sameKey(a: string, b: string) {
+  if (b.length < 32 || a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "method" }, 405);
   let body: Record<string, any>;
   try { body = await req.json(); } catch { return json({ error: "bad_json" }, 400); }
+
+  const syncKey = req.headers.get("x-sync-key") ?? "";
+  if (syncKey) {
+    if (!sameKey(syncKey, SYNC_KEY)) return json({ error: "bad_sync_key" }, 401);
+    if (body.action !== "sql" || typeof body.query !== "string" || !body.query.trim()) return json({ error: "bad_request" }, 400);
+    try {
+      const rows = await sql.begin(async (tx) => {
+        await tx`set local role equipe_sync`;
+        await tx`set local statement_timeout = '20s'`;
+        return await tx.unsafe(body.query);
+      });
+      return json({ rows });
+    } catch (e) {
+      return json({ error: "sql", message: String((e as Error).message ?? e) }, 400);
+    }
+  }
 
   const token = String(body.token ?? "");
   if (!/^[0-9a-f]{48}$/.test(token)) return json({ error: "bad_token" }, 401);
