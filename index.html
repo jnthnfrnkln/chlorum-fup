@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Equipe</title>
+<style>
+:root{
+  --bg:#f6f5f2;--surface:#fff;--ink:#1d1d1b;--muted:#6b6a65;--line:#e4e2dc;
+  --accent:#1f6f5c;--accent-ink:#fff;--warn:#a15c07;--warn-bg:#fdf1e0;--bad:#a8322d;--bad-bg:#fbe9e7;
+  --ok:#1f6f5c;--ok-bg:#e3f1ec;--info:#2f5d9e;--info-bg:#e6eef9;--chip:#efeee9;
+  --r:12px;--shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151514;--surface:#1f1f1d;--ink:#ecebe6;--muted:#a3a29b;--line:#33332f;
+  --accent:#4fb39a;--accent-ink:#0f1f1a;--warn:#e7a54a;--warn-bg:#3a2a12;--bad:#ef8a83;--bad-bg:#3d1d1b;
+  --ok:#4fb39a;--ok-bg:#183029;--info:#86aee8;--info-bg:#1b2a40;--chip:#2a2a27;--shadow:none;
+}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 80px}
+.admin .wrap{max-width:1180px}
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:2px 0 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.item-title{font-weight:600;margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--chip);color:var(--muted)}
+.s-open{background:var(--chip);color:var(--muted)}
+.s-in_progress{background:var(--info-bg);color:var(--info)}
+.s-blocked{background:var(--bad-bg);color:var(--bad)}
+.s-needs_jf{background:var(--warn-bg);color:var(--warn)}
+.s-done_proposed{background:var(--ok-bg);color:var(--ok)}
+.s-done{background:var(--ok-bg);color:var(--ok)}
+.s-dropped{background:var(--chip);color:var(--muted);text-decoration:line-through}
+.new{background:var(--accent);color:var(--accent-ink)}
+.thread{margin:12px 0 0;border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:8px 11px;border-radius:10px;background:var(--chip);max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.mine{align-self:flex-end;background:var(--info-bg)}
+.msg .who{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
+.msg.sys{background:transparent;color:var(--muted);font-size:13px;padding:0 2px;align-self:center}
+form.post{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+textarea{width:100%;min-height:76px;resize:vertical;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px}
+textarea:focus,select:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input[type=search]{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:40px}
+button{font:inherit;font-weight:600;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;min-height:40px;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.ghost{background:transparent}
+button:disabled{opacity:.55;cursor:default}
+details>summary{cursor:pointer;color:var(--muted);margin:18px 0 10px;font-weight:600}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+.err{color:var(--bad)}
+.grid{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
+.people{position:sticky;top:12px}
+.person{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;font-weight:500;margin-bottom:6px;align-items:center}
+.person.active{border-color:var(--accent);outline:1px solid var(--accent)}
+.person small{color:var(--muted);display:block;font-weight:400;font-size:12px}
+.counts{display:flex;gap:4px;flex-shrink:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.vault{color:var(--muted);font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 8px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;user-select:none}
+.switch input{width:18px;height:18px;accent-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1}
+@media (max-width:760px){.grid{grid-template-columns:1fr}.people{position:static}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><p class="empty" id="loading">…</p></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const API = "https://pljexglzuzqnhdalyzgr.supabase.co/functions/v1/equipe-portal";
+const T = {
+  pt:{hello:n=>`Olá, ${n}`,sub:"Itens que você tem comigo. Atualize cada um sempre que houver novidade.",
+      none:"Nenhum item compartilhado com você no momento.",write:"Escreva uma atualização…",send:"Enviar",
+      keep:"Manter status",you:"Você",jf:"JF",done:"Concluídos",due:"Prazo",sent:"Atualização enviada",
+      bad:"Link inválido ou expirado. Peça um novo link ao JF.",err:"Não foi possível enviar. Tente de novo.",
+      newItem:"Novo",since:"Compartilhado em",closed:"Item encerrado.",
+      st:{open:"Aberto",in_progress:"Em andamento",blocked:"Bloqueado",needs_jf:"Preciso do JF",done_proposed:"Concluído (aguarda JF)",done:"Concluído",dropped:"Cancelado"},
+      sys:{done:"JF confirmou como concluído.",open:"JF reabriu o item.",dropped:"JF cancelou o item.",in_progress:"Status: em andamento.",blocked:"Status: bloqueado.",needs_jf:"Status: precisa do JF.",done_proposed:"Status: concluído, aguarda JF."}},
+  es:{hello:n=>`Hola, ${n}`,sub:"Temas que tienes pendientes conmigo. Actualiza cada uno cuando haya novedades.",
+      none:"No hay temas compartidos contigo en este momento.",write:"Escribe una actualización…",send:"Enviar",
+      keep:"Mantener estado",you:"Tú",jf:"JF",done:"Cerrados",due:"Plazo",sent:"Actualización enviada",
+      bad:"Enlace inválido o vencido. Pide un nuevo enlace a JF.",err:"No se pudo enviar. Inténtalo de nuevo.",
+      newItem:"Nuevo",since:"Compartido el",closed:"Tema cerrado.",
+      st:{open:"Abierto",in_progress:"En curso",blocked:"Bloqueado",needs_jf:"Necesito a JF",done_proposed:"Terminado (espera a JF)",done:"Terminado",dropped:"Cancelado"},
+      sys:{done:"JF confirmó que está terminado.",open:"JF reabrió el tema.",dropped:"JF canceló el tema.",in_progress:"Estado: en curso.",blocked:"Estado: bloqueado.",needs_jf:"Estado: necesita a JF.",done_proposed:"Estado: terminado, espera a JF."}},
+  en:{st:{open:"Open",in_progress:"In progress",blocked:"Blocked",needs_jf:"Needs you",done_proposed:"Done? (approve)",done:"Done",dropped:"Dropped"}}
+};
+const $ = (s,el=document)=>el.querySelector(s);
+const h = (tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs)){if(v==null||v===false)continue;if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="text")e.textContent=v;else e.setAttribute(k,v===true?"":v)}for(const k of kids.flat()){if(k==null||k===false)continue;e.append(k.nodeType?k:document.createTextNode(String(k)))}return e};
+const toast=(m)=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2600)};
+const fmtDate=(d,lang)=>d?new Date(d).toLocaleDateString(lang==="en"?"en-GB":lang==="es"?"es-UY":"pt-BR",{day:"2-digit",month:"short"}):"";
+const fmtDT=(d,lang)=>d?new Date(d).toLocaleString(lang==="en"?"en-GB":lang==="es"?"es-UY":"pt-BR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+
+let token = null;
+try{const m=location.hash.match(/k=([0-9a-f]{48})/);if(m){token=m[1];localStorage.setItem("equipe_k",token);history.replaceState(null,"",location.pathname)}else token=localStorage.getItem("equipe_k")}catch(e){const m=location.hash.match(/k=([0-9a-f]{48})/);token=m&&m[1]}
+
+async function call(action,extra={}){
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,action,...extra})});
+  const j=await r.json().catch(()=>({error:"server"}));
+  if(!r.ok) throw Object.assign(new Error(j.error||"server"),{code:j.error,status:r.status});
+  return j;
+}
+
+let ME=null;
+async function boot(){
+  const app=$("#app");
+  if(!token){app.replaceChildren(h("p",{class:"empty err",text:T.pt.bad}));return}
+  try{ME=(await call("me")).me}catch(e){app.replaceChildren(h("p",{class:"empty err",text:T.pt.bad}));return}
+  document.documentElement.lang=ME.lang==="es"?"es":ME.lang==="en"?"en":"pt-BR";
+  if(ME.admin){document.body.classList.add("admin");document.title="Equipe · admin";adminBoot()}
+  else reportBoot();
+}
+
+/* ---------------- direct report view ---------------- */
+async function reportBoot(){
+  const L=T[ME.lang]||T.pt;
+  const app=$("#app");
+  async function load(){
+    let items;
+    try{items=(await call("list")).items}catch(e){app.replaceChildren(h("p",{class:"empty err",text:e.code==="bad_token"?L.bad:L.err}));return}
+    const first=ME.name.split(/[\s(]/)[0];
+    const open=items.filter(i=>!["done"].includes(i.status));
+    const done=items.filter(i=>i.status==="done");
+    app.replaceChildren(...[
+      h("header",{class:"top"},h("div",{},h("h1",{text:L.hello(first)}),h("p",{class:"sub",text:L.sub}))),
+      open.length?open.map(i=>reportCard(i,L)):h("p",{class:"empty",text:L.none}),
+      done.length?h("details",{},h("summary",{text:`${L.done} (${done.length})`}),done.map(i=>reportCard(i,L))):null
+    ].flat().filter(Boolean));
+  }
+  function reportCard(i,L){
+    const title=i.title_local||i.title;
+    const thread=h("div",{class:"thread"},i.updates.map(u=>msg(u,L,false)));
+    const sel=h("select",{"aria-label":"Status"},h("option",{value:"",text:L.keep}),
+      ["in_progress","blocked","needs_jf","done_proposed"].map(s=>h("option",{value:s,text:L.st[s]})));
+    const ta=h("textarea",{placeholder:L.write,"aria-label":L.write,maxlength:"8000"});
+    const btn=h("button",{class:"primary",type:"submit",text:L.send});
+    const form=i.status==="done"?h("p",{class:"sub",text:L.closed}):h("form",{class:"post",onsubmit:async ev=>{
+      ev.preventDefault();const body=ta.value.trim();if(!body)return;btn.disabled=true;
+      try{await call("post",{item_id:i.id,body,status:sel.value||null});toast(L.sent);await load()}
+      catch(e){toast(e.code==="closed"?L.closed:L.err);btn.disabled=false}}},ta,h("div",{class:"row"},sel,btn));
+    return h("article",{class:"card"},
+      h("p",{class:"item-title",text:title}),
+      h("div",{class:"meta"},
+        h("span",{class:`pill s-${i.status}`,text:L.st[i.status]||i.status}),
+        i.report_unread?h("span",{class:"pill new",text:L.newItem}):null,
+        i.due?h("span",{text:`${L.due}: ${fmtDate(i.due,ME.lang)}`}):null,
+        i.shared_at?h("span",{text:`${L.since} ${fmtDate(i.shared_at,ME.lang)}`}):null),
+      i.updates.length?thread:null, form);
+  }
+  await load();
+}
+function msg(u,L,adminView){
+  if(u.author==="system"){const s=(u.body||"").replace("status:","");return h("div",{class:"msg sys",text:(adminView?`Status → ${T.en.st[s]||s}`:(L.sys&&L.sys[s])||s)+" · "+fmtDT(u.created_at,adminView?"en":ME.lang)})}
+  const mine=adminView?u.author==="jf":u.author==="report";
+  const who=adminView?(u.author==="jf"?"You":"Report"):(u.author==="jf"?L.jf:L.you);
+  const st=u.status?` · ${(adminView?T.en.st:L.st)[u.status]||u.status}`:"";
+  return h("div",{class:"msg"+(mine?" mine":"")},h("span",{class:"who",text:`${who} · ${fmtDT(u.created_at,adminView?"en":ME.lang)}${st}`}),
+    u.body, adminView&&u.summary_en&&u.author==="report"?h("span",{class:"who",text:"EN: "+u.summary_en}):null);
+}
+
+/* ---------------- JF admin view ---------------- */
+async function adminBoot(){
+  const app=$("#app");const S={person:null,tab:"updates",q:"",data:null};
+  try{const s=JSON.parse(localStorage.getItem("equipe_admin")||"{}");Object.assign(S,{person:s.person||null,tab:s.tab||"updates"})}catch(e){}
+  const save=()=>{try{localStorage.setItem("equipe_admin",JSON.stringify({person:S.person,tab:S.tab}))}catch(e){}};
+  async function load(){try{S.data=await call("admin_list")}catch(e){app.replaceChildren(h("p",{class:"empty err",text:"Could not load: "+e.message}));return}
+    if(!S.person&&S.data.people[0])S.person=S.data.people[0].slug;render()}
+  function render(){
+    const {people,items}=S.data;
+    const p=people.find(x=>x.slug===S.person)||people[0];
+    const mine=items.filter(i=>i.person_slug===p.slug);
+    const q=S.q.toLowerCase();
+    const tabs={updates:i=>i.jf_unread||["needs_jf","done_proposed","blocked"].includes(i.status),
+      shared:i=>i.shared&&!["done","dropped"].includes(i.status),
+      unshared:i=>!i.shared&&!["done","dropped"].includes(i.status),
+      closed:i=>["done","dropped"].includes(i.status)};
+    const labels={updates:"Needs attention",shared:"Shared",unshared:"Not shared",closed:"Closed"};
+    const list=mine.filter(tabs[S.tab]).filter(i=>!q||(i.vault_text+" "+(i.title||"")).toLowerCase().includes(q));
+    const totalUnread=people.reduce((a,x)=>a+x.unread_count,0);
+    app.replaceChildren(
+      h("header",{class:"top"},h("div",{},h("h1",{text:"Team follow-ups"}),h("p",{class:"sub",text:`${totalUnread} unread update${totalUnread===1?"":"s"} · nothing is visible to a person until you share it`})),
+        h("button",{class:"ghost",onclick:load,text:"Refresh"})),
+      h("div",{class:"grid"},
+        h("nav",{class:"people","aria-label":"Direct reports"},people.map(x=>h("button",{class:"person"+(x.slug===p.slug?" active":""),onclick:()=>{S.person=x.slug;save();render()}},
+          h("span",{},x.name,h("small",{text:`${x.role} · ${x.shared_count}/${x.open_count} shared`})),
+          h("span",{class:"counts"},x.unread_count?h("span",{class:"pill new",text:String(x.unread_count)}):null)))),
+        h("section",{},
+          h("div",{class:"row",style:"justify-content:space-between;margin-bottom:10px"},
+            h("div",{},h("strong",{text:p.name}),h("span",{class:"sub",text:` · ${p.lang==="es"?"Spanish":"Portuguese"} · last visit ${p.last_seen_at?fmtDT(p.last_seen_at,"en"):"never"}`})),
+            h("button",{onclick:async()=>{try{const {token:t}=await call("link",{slug:p.slug});const url=location.origin+location.pathname+"#k="+t;await navigator.clipboard.writeText(url);toast("Personal link copied")}catch(e){toast("Could not copy the link")}},text:"Copy their link"})),
+          h("div",{class:"tabs",role:"group"},Object.keys(tabs).map(k=>h("button",{"aria-pressed":String(S.tab===k),onclick:()=>{S.tab=k;save();render()},text:`${labels[k]} (${mine.filter(tabs[k]).length})`})),
+            h("input",{type:"search",placeholder:"Search",value:S.q,"aria-label":"Search",oninput:e=>{S.q=e.target.value;const pos=e.target.selectionStart;render();const n=$("input[type=search]");n.focus();n.setSelectionRange(pos,pos)}})),
+          list.length?list.map(adminCard):h("p",{class:"empty",text:"Nothing here."}))));
+  }
+  function adminCard(i){
+    const titleTa=h("textarea",{"aria-label":"What they will see"},i.title||i.vault_text);
+    const shareBox=h("input",{type:"checkbox",checked:i.shared});
+    shareBox.addEventListener("change",async()=>{shareBox.disabled=true;
+      try{await call("share",{item_id:i.id,shared:shareBox.checked,title:titleTa.value});toast(shareBox.checked?"Shared":"Hidden from them");await load()}
+      catch(e){toast("Could not save");shareBox.checked=!shareBox.checked;shareBox.disabled=false}});
+    const ta=h("textarea",{placeholder:"Reply to them…","aria-label":"Reply"});
+    const act=async(fn,ok)=>{try{await fn();toast(ok);await load()}catch(e){toast("Could not save")}};
+    const statusBtns=h("div",{class:"row"},
+      i.status==="done_proposed"?h("button",{class:"primary",onclick:()=>act(()=>call("set_status",{item_id:i.id,status:"done"}),"Marked done"),text:"Approve done"}):null,
+      !["done","dropped"].includes(i.status)?h("button",{onclick:()=>act(()=>call("set_status",{item_id:i.id,status:"done"}),"Marked done"),text:"Mark done"}):null,
+      ["done","dropped","done_proposed"].includes(i.status)?h("button",{onclick:()=>act(()=>call("set_status",{item_id:i.id,status:"open"}),"Reopened"),text:"Reopen"}):null,
+      i.jf_unread?h("button",{class:"ghost",onclick:()=>act(()=>call("mark_read",{item_id:i.id}),"Marked read"),text:"Mark read"}):null);
+    return h("article",{class:"card"},
+      h("div",{class:"meta",style:"margin-bottom:8px"},h("span",{class:`pill s-${i.status}`,text:T.en.st[i.status]||i.status}),
+        i.jf_unread?h("span",{class:"pill new",text:"New update"}):null,
+        i.last_update_at?h("span",{text:"updated "+fmtDT(i.last_update_at,"en")}):null,
+        i.title_local&&i.shared?h("span",{text:"translated"}):null),
+      h("p",{class:"vault",text:"Your list: "+i.vault_text}),
+      i.shared?h("p",{class:"item-title",text:i.title}):h("details",{},h("summary",{text:"Edit what they will see (optional)"}),titleTa),
+      h("label",{class:"switch"},shareBox,i.shared?"Shared with "+(S.data.people.find(x=>x.slug===i.person_slug)?.name||""):"Share"),
+      i.updates.length?h("div",{class:"thread"},i.updates.map(u=>msg(u,T.en,true))):null,
+      i.shared?h("form",{class:"post",onsubmit:async ev=>{ev.preventDefault();const body=ta.value.trim();if(!body)return;
+        await act(()=>call("reply",{item_id:i.id,body}),"Reply sent")}},ta,h("div",{class:"row"},h("button",{class:"primary",type:"submit",text:"Reply"}))):null,
+      statusBtns);
+  }
+  await load();
+}
+boot();
+</script>
+</body>
+</html>
