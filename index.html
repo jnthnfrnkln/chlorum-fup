@@ -54,6 +54,7 @@ button.ghost{background:transparent}
 button:disabled{opacity:.55;cursor:default}
 details>summary{cursor:pointer;color:var(--muted);margin:18px 0 10px;font-weight:600}
 .empty{color:var(--muted);text-align:center;padding:40px 10px}
+.landing{max-width:520px;margin:12vh auto 0;text-align:center;padding:0 16px}.landing h1{margin-bottom:16px}.landing p{line-height:1.5}.landing .err{color:var(--bad)}
 .err{color:var(--bad)}
 .grid{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
 .people{position:sticky;top:12px}
@@ -112,8 +113,17 @@ async function call(action,extra={}){
 let ME=null;
 async function boot(){
   const app=$("#app");
-  if(!token){app.replaceChildren(h("p",{class:"empty err",text:T.pt.bad}));return}
-  try{ME=(await call("me")).me}catch(e){app.replaceChildren(h("p",{class:"empty err",text:T.pt.bad}));return}
+  const landing=(why)=>app.replaceChildren(h("div",{class:"landing"},
+    h("h1",{text:"Chlorum · acompanhamento"}),
+    why==="down"
+      ? h("p",{class:"err",text:"Não foi possível conectar ao servidor agora. Tente de novo em alguns minutos. · No se pudo conectar al servidor. Inténtalo de nuevo en unos minutos."})
+      : h("p",{text:why==="bad"
+          ? "Este link não é válido. Peça um novo link ao JF. · Este enlace no es válido. Pide uno nuevo a JF."
+          : "Esta página abre pelo seu link pessoal, enviado pelo JF. · Esta página se abre con tu enlace personal, enviado por JF."}),
+    h("p",{class:"sub",text:"Open your personal link (it ends in #k=…) to see your page."})));
+  if(!token){landing("none");return}
+  try{ME=(await call("me")).me}catch(e){
+    if(e.code==="bad_token"){try{localStorage.removeItem("equipe_k")}catch(_){}landing("bad")}else landing("down");return}
   document.documentElement.lang=ME.lang==="es"?"es":ME.lang==="en"?"en":"pt-BR";
   if(ME.admin){document.body.classList.add("admin");document.title="Equipe · admin";adminBoot()}
   else reportBoot();
